@@ -1,6 +1,7 @@
 package com.example.exam.service;
 
 import com.example.exam.domain.Question;
+import com.example.exam.exception.TooBigAmountException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -31,7 +32,7 @@ class ExaminerServiceImplTest {
     void shouldThrowExceptionWhenAmountOfRandomQuestionsIsGreaterThanQuestionCollectionSize() {
         int amount = 5;
         when(javaQuestionServiceMock.getCollectionSize()).thenReturn(amount - 1);
-        Assertions.assertThrows(IndexOutOfBoundsException.class, () -> sut.getQuestions(amount));
+        Assertions.assertThrows(TooBigAmountException.class, () -> sut.getQuestions(amount));
     }
     @Test
     void shouldReturnAmountOfUniqueQuestions() {

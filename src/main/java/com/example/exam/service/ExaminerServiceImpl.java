@@ -1,6 +1,7 @@
 package com.example.exam.service;
 
 import com.example.exam.domain.Question;
+import com.example.exam.exception.TooBigAmountException;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
@@ -14,7 +15,7 @@ public class ExaminerServiceImpl implements ExaminerService{
     @Override
     public Collection<Question> getQuestions(int amount) {
         if (amount > javaQuestionService.getCollectionSize()) {
-            throw new IndexOutOfBoundsException("Try to get less questions, there are only "
+            throw new TooBigAmountException("Try to get less questions, there are only "
                     + javaQuestionService.getCollectionSize());
         } else {
             Random random = new Random();
