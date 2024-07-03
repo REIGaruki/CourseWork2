@@ -10,4 +10,5 @@ public interface QuestionService {
     Question remove(Question question);
     Collection<Question> getAll();
     Question getRandomQuestion();
+    int getCollectionSize();
 }

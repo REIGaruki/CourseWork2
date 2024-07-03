@@ -11,9 +11,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Stream;
 
 class JavaQuestionServiceTest {
@@ -30,7 +28,7 @@ class JavaQuestionServiceTest {
 
     @BeforeEach
     void fillngListBeforeAnyTest() {
-        sut.javaQuestions = new ArrayList<>(Arrays.asList(
+        sut.javaRepositoryService.questions = new ArrayList<>(Arrays.asList(
                 new Question(QUESTION_1, ANSWER_1),
                 new Question(QUESTION_2, ANSWER_2),
                 new Question(QUESTION_3, ANSWER_3)
@@ -59,7 +57,7 @@ class JavaQuestionServiceTest {
                 new Question(QUESTION_4, ANSWER_4)
         ));
         sut.add(QUESTION_4, ANSWER_4);
-        List<Question> actual = sut.javaQuestions;
+        List<Question> actual = sut.javaRepositoryService.questions;
         Assertions.assertEquals(expected, actual);
     }
     @Test
@@ -84,7 +82,7 @@ class JavaQuestionServiceTest {
                 new Question(QUESTION_3, ANSWER_3)
         ));
         sut.remove(removedQuestion);
-        List<Question> actual = sut.javaQuestions;
+        List<Question> actual = sut.javaRepositoryService.questions;
         Assertions.assertEquals(expected, actual);
     }
     @Test
@@ -102,7 +100,7 @@ class JavaQuestionServiceTest {
 
     @Test
     void shouldGetAllQuestions() {
-        List<Question> expected = new ArrayList<>(Arrays.asList(
+        Set<Question> expected = new HashSet<>(Arrays.asList(
                 new Question(QUESTION_1, ANSWER_1),
                 new Question(QUESTION_2, ANSWER_2),
                 new Question(QUESTION_3, ANSWER_3)
@@ -121,6 +119,6 @@ class JavaQuestionServiceTest {
     @Test
     void shouldReturnRandomQuestionFromPoolOfJavaQuestions() {
         Question randomQuestion = sut.getRandomQuestion();
-        Assertions.assertTrue(sut.javaQuestions.contains(randomQuestion));
+        Assertions.assertTrue(sut.javaRepositoryService.questions.contains(randomQuestion));
     }
 }

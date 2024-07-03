@@ -26,7 +26,7 @@ class ExaminerServiceImplTest {
     @Mock
     JavaQuestionService javaQuestionServiceMock = new JavaQuestionService();
     @InjectMocks
-    ExaminerService sut = new ExaminerServiceImpl();
+    ExaminerService sut;
 
     @Test
     void shouldThrowExceptionWhenAmountOfRandomQuestionsIsGreaterThanQuestionCollectionSize() {
