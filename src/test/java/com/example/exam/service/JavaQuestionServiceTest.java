@@ -2,6 +2,7 @@ package com.example.exam.service;
 
 import com.example.exam.domain.Question;
 import com.example.exam.exception.NoArgumentException;
+import com.example.exam.exception.QuestionAlreadyExistsException;
 import com.example.exam.exception.QuestionNotExistException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,16 +18,22 @@ import java.util.stream.Stream;
 
 class JavaQuestionServiceTest {
     JavaQuestionService sut = new JavaQuestionService();
+    String QUESTION_1 = "Что такое «переменная»?";
+    String ANSWER_1 = "Это переменная";
+    String QUESTION_2 = "По каким параметрам переменные различаются?";
+    String ANSWER_2 = "Параметры";
+    String QUESTION_3 = "Перечислите типы переменных и действия, которые с ними можно осуществлять.";
+    String ANSWER_3 = "Типы и действия";
+    String QUESTION_4 = "Новый вопрос";
+    String ANSWER_4 = "Новый ответ";
+
 
     @BeforeEach
     void fillngListBeforeAnyTest() {
         sut.javaQuestions = new ArrayList<>(Arrays.asList(
-                new Question("Что такое «переменная»?",
-                        "Это переменная"),
-                new Question("По каким параметрам переменные различаются?",
-                        "Параметры"),
-                new Question("Перечислите типы переменных и действия, которые с ними можно осуществлять.",
-                        "Типы и действия")
+                new Question(QUESTION_1, ANSWER_1),
+                new Question(QUESTION_2, ANSWER_2),
+                new Question(QUESTION_3, ANSWER_3)
         ));
     }
     public static Stream<Arguments> provideParamsForAddQuestionTest() {
@@ -44,37 +51,37 @@ class JavaQuestionServiceTest {
     }
     @Test
     void shouldAddQuestionCorrectly() {
-        Question newQuestion = new Question("Новый вопрос", "Ответ на новый ответ");
+        Question newQuestion = new Question(QUESTION_4, ANSWER_4);
         List<Question> expected = new ArrayList<>(Arrays.asList(
-                new Question("Что такое «переменная»?",
-                        "Это переменная"),
-                new Question("По каким параметрам переменные различаются?",
-                        "Параметры"),
-                new Question("Перечислите типы переменных и действия, которые с ними можно осуществлять.",
-                        "Типы и действия"),
-                new Question("Новый вопрос",
-                        "Ответ на новый ответ")
+                new Question(QUESTION_1, ANSWER_1),
+                new Question(QUESTION_2, ANSWER_2),
+                new Question(QUESTION_3, ANSWER_3),
+                new Question(QUESTION_4, ANSWER_4)
         ));
-        sut.add("Новый вопрос", "Ответ на новый ответ");
+        sut.add(QUESTION_4, ANSWER_4);
         List<Question> actual = sut.javaQuestions;
         Assertions.assertEquals(expected, actual);
     }
     @Test
     void shouldReturnSameAddedQuestion() {
-        Question expected = new Question("Новый вопрос", "Ответ на новый ответ");
-        Question actual = sut.add("Новый вопрос", "Ответ на новый ответ");
+        Question expected = new Question(QUESTION_4, ANSWER_4);
+        Question actual = sut.add(QUESTION_4, ANSWER_4);
         Assertions.assertEquals(expected, actual);
+    }
+    @Test
+    void shoudThrowExceptionIfQuestionIsAlreadyAdded() {
+        Assertions.assertThrows(QuestionAlreadyExistsException.class,
+                () -> sut.add(
+                        new Question(QUESTION_1, ANSWER_1)
+                ));
     }
 
     @Test
     void shouldRemoveQuestionCorrectly() {
-        Question removedQuestion = new Question("По каким параметрам переменные различаются?",
-                "Параметры");
+        Question removedQuestion = new Question(QUESTION_2, ANSWER_2);
         List<Question> expected = new ArrayList<>(Arrays.asList(
-                new Question("Что такое «переменная»?",
-                        "Это переменная"),
-                new Question("Перечислите типы переменных и действия, которые с ними можно осуществлять.",
-                        "Типы и действия")
+                new Question(QUESTION_1, ANSWER_1),
+                new Question(QUESTION_3, ANSWER_3)
         ));
         sut.remove(removedQuestion);
         List<Question> actual = sut.javaQuestions;
@@ -82,27 +89,23 @@ class JavaQuestionServiceTest {
     }
     @Test
     void shouldReturnSameRemovedQuestion() {
-        Question removedQuestion = new Question("Что такое «переменная»?",
-                "Это переменная");
+        Question removedQuestion = new Question(QUESTION_1, ANSWER_1);
         Question expected = removedQuestion;
         Question actual = sut.remove(removedQuestion);
         Assertions.assertEquals(expected, actual);
     }
     @Test
     void shouldThrowExceptionWhenRemoveQuestionThatDoesNotExist() {
-        Question removedQuestion = new Question("Новый вопрос", "Ответ на новый ответ");
+        Question removedQuestion = new Question(QUESTION_4, QUESTION_4);
         Assertions.assertThrows(QuestionNotExistException.class, () -> sut.remove(removedQuestion));
     }
 
     @Test
     void shouldGetAllQuestions() {
         List<Question> expected = new ArrayList<>(Arrays.asList(
-                new Question("Что такое «переменная»?",
-                        "Это переменная"),
-                new Question("По каким параметрам переменные различаются?",
-                        "Параметры"),
-                new Question("Перечислите типы переменных и действия, которые с ними можно осуществлять.",
-                        "Типы и действия")
+                new Question(QUESTION_1, ANSWER_1),
+                new Question(QUESTION_2, ANSWER_2),
+                new Question(QUESTION_3, ANSWER_3)
         ));
         List<Question> actual = sut.getAll();
         Assertions.assertEquals(expected, actual);

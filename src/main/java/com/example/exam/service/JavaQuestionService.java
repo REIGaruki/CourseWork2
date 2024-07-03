@@ -2,6 +2,7 @@ package com.example.exam.service;
 
 import com.example.exam.domain.Question;
 import com.example.exam.exception.NoArgumentException;
+import com.example.exam.exception.QuestionAlreadyExistsException;
 import com.example.exam.exception.QuestionNotExistException;
 import org.springframework.stereotype.Service;
 
@@ -36,6 +37,8 @@ public class JavaQuestionService implements QuestionService{
     public Question add(String question, String answer) {
         if (question == null || answer == null || question == "" || answer == "") {
             throw new NoArgumentException("Absence of question or answer");
+        } else if (javaQuestions.contains(new Question(question, answer))) {
+            throw new QuestionAlreadyExistsException("Question already exists");
         } else {
             Question newQuestion = new Question(question, answer);
             javaQuestions.add(newQuestion);
@@ -45,8 +48,12 @@ public class JavaQuestionService implements QuestionService{
 
     @Override
     public Question add(Question question) {
-        javaQuestions.add(question);
-        return question;
+        if (javaQuestions.contains(question)) {
+            throw new QuestionAlreadyExistsException("Question already exists");
+        } else {
+            javaQuestions.add(question);
+            return question;
+        }
     }
 
     @Override
