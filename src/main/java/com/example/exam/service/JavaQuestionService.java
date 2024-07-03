@@ -1,6 +1,8 @@
 package com.example.exam.service;
 
 import com.example.exam.domain.Question;
+import com.example.exam.exception.NoArgumentException;
+import com.example.exam.exception.QuestionNotExistException;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -29,11 +31,16 @@ public class JavaQuestionService implements QuestionService{
             new Question("Что такое \"метод\"?",
                     "Сериал")
     ));
+
     @Override
     public Question add(String question, String answer) {
-        Question newQuestion = new Question(question, answer);
-        javaQuestions.add(newQuestion);
-        return newQuestion;
+        if (question == null || answer == null || question == "" || answer == "") {
+            throw new NoArgumentException("Absence of question or answer");
+        } else {
+            Question newQuestion = new Question(question, answer);
+            javaQuestions.add(newQuestion);
+            return newQuestion;
+        }
     }
 
     @Override
@@ -44,8 +51,12 @@ public class JavaQuestionService implements QuestionService{
 
     @Override
     public Question remove(Question question) {
-        javaQuestions.remove(question);
-        return question;
+        if (!javaQuestions.contains(question)) {
+            throw new QuestionNotExistException("Question does not exist");
+        } else {
+            javaQuestions.remove(question);
+            return question;
+        }
     }
 
     @Override

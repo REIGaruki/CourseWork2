@@ -14,7 +14,8 @@ public class ExaminerServiceImpl implements ExaminerService{
     @Override
     public Collection<Question> getQuestions(int amount) {
         if (amount > javaQuestionService.getCollectionSize()) {
-            throw new IndexOutOfBoundsException();
+            throw new IndexOutOfBoundsException("Try to get less questions, there are only "
+                    + javaQuestionService.getCollectionSize());
         } else {
             Random random = new Random();
             Set<Question> randomQuestions = new HashSet<>();
