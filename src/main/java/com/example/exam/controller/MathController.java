@@ -11,15 +11,13 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Collection;
 
 @RestController
-@RequestMapping(path="/java")
-public class JavaController {
+@RequestMapping(path="/math")
+public class MathController {
     QuestionService questionService;
-
     @Autowired
-    public JavaController(@Qualifier("JavaQuestionService") QuestionService questionService) {
+    public MathController(@Qualifier("MathQuestionService") QuestionService questionService) {
         this.questionService = questionService;
     }
-
     @GetMapping("/add")
     public Question add(String question, String answer) {
         return questionService.add(question, answer);
