@@ -15,6 +15,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -97,8 +98,13 @@ public class JavaQuestionRepositoryTest {
 
     @Test
     void shouldGetAllQuestions() {
-        int expected = sut.getCollectionSize();
-        int actual = sut.getAll().size();
+        List<Question> javaQuestions = new ArrayList<>(Arrays.asList(
+                new Question(QUESTION_1, ANSWER_1),
+                new Question(QUESTION_2, ANSWER_2),
+                new Question(QUESTION_3, ANSWER_3)
+        ));
+        List<Question> expected = javaQuestions;
+        Collection<Question> actual = sut.getAll();
         Assertions.assertEquals(expected, actual);
     }
 
