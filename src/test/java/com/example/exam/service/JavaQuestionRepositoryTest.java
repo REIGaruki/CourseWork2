@@ -70,8 +70,7 @@ public class JavaQuestionRepositoryTest {
     @Test
     void shoudThrowExceptionIfQuestionIsAlreadyAdded() {
         Assertions.assertThrows(QuestionAlreadyExistsException.class,
-                () -> sut.add(
-                        sut.getRandomQuestion()
+                () -> sut.add(new Question(QUESTION_1, ANSWER_1)
                 ));
     }
 
