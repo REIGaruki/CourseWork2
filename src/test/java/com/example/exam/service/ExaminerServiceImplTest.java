@@ -80,14 +80,6 @@ class ExaminerServiceImplTest {
     }
     @Test
     void shouldReturnAmountOfUniqueQuestions() {
-        Set<Question> expected = new HashSet<>();
-        expected.add(QUESTION_1);
-        expected.add(QUESTION_2);
-        expected.add(QUESTION_3);
-        expected.add(QUESTION_4);
-        expected.add(QUESTION_5);
-        expected.add(QUESTION_6);
-        expected.add(QUESTION_7);
         when(javaQuestionRepositoryMock.getRandomQuestion()).thenReturn(
                 QUESTION_1,
                 QUESTION_1,
@@ -105,6 +97,14 @@ class ExaminerServiceImplTest {
                 QUESTION_5,
                 QUESTION_7
         );
+        Set<Question> expected = new HashSet<>();
+        expected.add(QUESTION_1);
+        expected.add(QUESTION_2);
+        expected.add(QUESTION_3);
+        expected.add(QUESTION_4);
+        expected.add(QUESTION_5);
+        expected.add(QUESTION_6);
+        expected.add(QUESTION_7);
         Collection<Question> actual = sut.getQuestions(TOTAL_AMOUNT);
         Assertions.assertEquals(expected, actual);
         Assertions.assertEquals(TOTAL_AMOUNT, actual.size());
