@@ -43,16 +43,16 @@ class ExaminerServiceImplTest {
     private final int TOTAL_AMOUNT = MATH_AMOUNT + JAVA_AMOUNT;
     private final int ERROR_AMOUNT = TOTAL_AMOUNT + 1;
 
-//    @Mock(name="JavaQuestionRepository")
-//    QuestionRepository javaQuestionRepositoryMock;
-//    @Mock(name="MathQuestionRepository")
-//    QuestionRepository mathQuestionRepositoryMock;
-//
-//    @InjectMocks
-//    ExaminerServiceImpl sut;
-    private final QuestionRepository javaQuestionRepositoryMock = mock(QuestionRepository.class);
-    private final QuestionRepository mathQuestionRepositoryMock = mock(QuestionRepository.class);
-    private ExaminerServiceImpl sut;
+    @Mock(name="JavaQuestionRepository")
+    QuestionRepository javaQuestionRepositoryMock;
+    @Mock(name="MathQuestionRepository")
+    QuestionRepository mathQuestionRepositoryMock;
+
+    @InjectMocks
+    ExaminerServiceImpl sut;
+//    private final QuestionRepository javaQuestionRepositoryMock = mock(QuestionRepository.class);
+//    private final QuestionRepository mathQuestionRepositoryMock = mock(QuestionRepository.class);
+//    private ExaminerServiceImpl sut;
     @BeforeEach
     void initSut() {
         sut = new ExaminerServiceImpl(javaQuestionRepositoryMock, mathQuestionRepositoryMock);

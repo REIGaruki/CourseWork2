@@ -6,6 +6,7 @@ import com.example.exam.exception.TooBigAmountException;
 import com.example.exam.exception.TooSmallAmountException;
 import com.example.exam.repository.QuestionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
@@ -15,11 +16,12 @@ import java.util.Set;
 
 @Service
 public class ExaminerServiceImpl implements ExaminerService{
-    @Autowired
+    @Qualifier("JavaQuestionRepository")
     QuestionRepository javaQuestionRepository;
-    @Autowired
+    @Qualifier("MathQuestionRepository")
     QuestionRepository mathQuestionRepository;
 
+    @Autowired
     public ExaminerServiceImpl(QuestionRepository javaQuestionRepository, QuestionRepository mathQuestionRepository) {
         this.javaQuestionRepository = javaQuestionRepository;
         this.mathQuestionRepository = mathQuestionRepository;

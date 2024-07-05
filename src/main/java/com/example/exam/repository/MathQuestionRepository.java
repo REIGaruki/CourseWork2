@@ -5,6 +5,7 @@ import com.example.exam.exception.NoArgumentException;
 import com.example.exam.exception.QuestionAlreadyExistsException;
 import com.example.exam.exception.QuestionNotExistException;
 import jakarta.annotation.PostConstruct;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -13,6 +14,7 @@ import java.util.List;
 import java.util.Random;
 
 @Repository
+@Qualifier("MathQuestionRepository")
 public class MathQuestionRepository implements QuestionRepository{
     private List<Question> mathQuestions;
 
