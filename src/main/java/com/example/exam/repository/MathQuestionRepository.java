@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.Random;
 
 @Repository
-@Qualifier("MathQuestionRepository")
 public class MathQuestionRepository implements QuestionRepository{
     private List<Question> mathQuestions;
 

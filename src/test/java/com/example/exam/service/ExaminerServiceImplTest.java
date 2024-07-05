@@ -4,7 +4,6 @@ import com.example.exam.domain.Question;
 import com.example.exam.exception.RepositoryIsEmptyException;
 import com.example.exam.exception.TooBigAmountException;
 import com.example.exam.exception.TooSmallAmountException;
-import com.example.exam.repository.QuestionRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -43,21 +42,19 @@ class ExaminerServiceImplTest {
     private final int TOTAL_AMOUNT = MATH_AMOUNT + JAVA_AMOUNT;
     private final int ERROR_AMOUNT = TOTAL_AMOUNT + 1;
 
-    @Mock(name="JavaQuestionRepository")
-    QuestionRepository javaQuestionRepositoryMock;
-    @Mock(name="MathQuestionRepository")
-    QuestionRepository mathQuestionRepositoryMock;
+    @Mock(name="JavaQuestionWervice")
+    QuestionService javaQuestionServiceMock;
+    @Mock(name="MathQuestionService")
+    QuestionService mathQuestionServiceMock;
 
     @InjectMocks
     ExaminerServiceImpl sut;
-//    private final QuestionRepository javaQuestionRepositoryMock = mock(QuestionRepository.class);
-//    private final QuestionRepository mathQuestionRepositoryMock = mock(QuestionRepository.class);
-//    private ExaminerServiceImpl sut;
+
     @BeforeEach
     void initSut() {
-        sut = new ExaminerServiceImpl(javaQuestionRepositoryMock, mathQuestionRepositoryMock);
-        when(javaQuestionRepositoryMock.getCollectionSize()).thenReturn(JAVA_AMOUNT);
-        when(mathQuestionRepositoryMock.getCollectionSize()).thenReturn(MATH_AMOUNT);
+        sut = new ExaminerServiceImpl(javaQuestionServiceMock, mathQuestionServiceMock);
+        when(javaQuestionServiceMock.getCollectionSize()).thenReturn(JAVA_AMOUNT);
+        when(mathQuestionServiceMock.getCollectionSize()).thenReturn(MATH_AMOUNT);
     }
 
 
@@ -71,8 +68,8 @@ class ExaminerServiceImplTest {
     }
     @Test
     void shouldThrowExceptionWhenThereAreNoQuestions() {
-        when(javaQuestionRepositoryMock.getCollectionSize()).thenReturn(0);
-        when(mathQuestionRepositoryMock.getCollectionSize()).thenReturn(0);
+        when(javaQuestionServiceMock.getCollectionSize()).thenReturn(0);
+        when(mathQuestionServiceMock.getCollectionSize()).thenReturn(0);
         Random random = new Random();
         int randomPositiveNumber = random.nextInt(Integer.MAX_VALUE) + 1;
         Assertions.assertThrows(RepositoryIsEmptyException.class,
@@ -80,7 +77,7 @@ class ExaminerServiceImplTest {
     }
     @Test
     void shouldReturnAmountOfUniqueQuestions() {
-        when(javaQuestionRepositoryMock.getRandomQuestion()).thenReturn(
+        when(javaQuestionServiceMock.getRandomQuestion()).thenReturn(
                 QUESTION_1,
                 QUESTION_1,
                 QUESTION_2,
@@ -90,7 +87,7 @@ class ExaminerServiceImplTest {
                 QUESTION_2,
                 QUESTION_4
         );
-        when(mathQuestionRepositoryMock.getRandomQuestion()).thenReturn(
+        when(mathQuestionServiceMock.getRandomQuestion()).thenReturn(
                 QUESTION_5,
                 QUESTION_6,
                 QUESTION_6,

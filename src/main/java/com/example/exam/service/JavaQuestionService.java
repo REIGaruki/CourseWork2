@@ -2,11 +2,13 @@ package com.example.exam.service;
 
 import com.example.exam.domain.Question;
 import com.example.exam.repository.QuestionRepository;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 
 @Service
+@Qualifier("JavaQuestionService")
 public class JavaQuestionService implements QuestionService{
     private QuestionRepository javaQuestionRepository;
 

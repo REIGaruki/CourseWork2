@@ -11,7 +11,6 @@ import org.springframework.stereotype.Repository;
 import java.util.*;
 
 @Repository
-@Qualifier("JavaQuestionRepository")
 public class JavaQuestionRepository implements QuestionRepository{
     private List<Question> javaQuestions;
 

@@ -16,20 +16,20 @@ import java.util.Set;
 
 @Service
 public class ExaminerServiceImpl implements ExaminerService{
-    @Qualifier("JavaQuestionRepository")
-    QuestionRepository javaQuestionRepository;
-    @Qualifier("MathQuestionRepository")
-    QuestionRepository mathQuestionRepository;
+    @Qualifier("JavaQuestionService")
+    QuestionService javaQuestionService;
+    @Qualifier("MathQuestionService")
+    QuestionService mathQuestionService;
 
     @Autowired
-    public ExaminerServiceImpl(QuestionRepository javaQuestionRepository, QuestionRepository mathQuestionRepository) {
-        this.javaQuestionRepository = javaQuestionRepository;
-        this.mathQuestionRepository = mathQuestionRepository;
+    public ExaminerServiceImpl(QuestionService javaQuestionService, QuestionService mathQuestionService) {
+        this.javaQuestionService = javaQuestionService;
+        this.mathQuestionService = mathQuestionService;
     }
 
     @Override
     public Collection<Question> getQuestions(int amount) {
-        int totalAmount = javaQuestionRepository.getCollectionSize() + mathQuestionRepository.getCollectionSize();
+        int totalAmount = javaQuestionService.getCollectionSize() + mathQuestionService.getCollectionSize();
         if (totalAmount == 0) {
             throw new RepositoryIsEmptyException("We have no questions for you yet");
         }else if (amount <= 0) {
@@ -43,14 +43,14 @@ public class ExaminerServiceImpl implements ExaminerService{
             Set<Question> randomQuestions = new HashSet<>();
             Random random = new Random();
             while (javaQuestionAmount + mathQuestionAmount != amount) {
-                javaQuestionAmount = random.nextInt(javaQuestionRepository.getCollectionSize() + 1);
-                mathQuestionAmount = random.nextInt(mathQuestionRepository.getCollectionSize() + 1);
+                javaQuestionAmount = random.nextInt(javaQuestionService.getCollectionSize() + 1);
+                mathQuestionAmount = random.nextInt(mathQuestionService.getCollectionSize() + 1);
             }
             while (randomQuestions.size() < javaQuestionAmount) {
-                randomQuestions.add(javaQuestionRepository.getRandomQuestion());
+                randomQuestions.add(javaQuestionService.getRandomQuestion());
             }
             while (randomQuestions.size() < amount) {
-                randomQuestions.add(mathQuestionRepository.getRandomQuestion());
+                randomQuestions.add(mathQuestionService.getRandomQuestion());
             }
             return randomQuestions;
         }
