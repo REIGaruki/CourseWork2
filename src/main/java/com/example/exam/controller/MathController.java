@@ -1,7 +1,8 @@
 package com.example.exam.controller;
 
 import com.example.exam.domain.Question;
-import com.example.exam.service.MathQuestionService;
+import com.example.exam.service.QuestionService;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -11,9 +12,9 @@ import java.util.Collection;
 @RestController
 @RequestMapping(path="/math")
 public class MathController {
-    MathQuestionService mathQuestionService;
+    @Qualifier("MathQuestionService") QuestionService mathQuestionService;
 
-    public MathController(MathQuestionService mathQuestionService) {
+    public MathController(QuestionService mathQuestionService) {
         this.mathQuestionService = mathQuestionService;
     }
 
@@ -27,6 +28,7 @@ public class MathController {
         return mathQuestionService.remove(question);
     }
 
+    @GetMapping
     public Collection<Question> getAll() {
         return mathQuestionService.getAll();
     }
