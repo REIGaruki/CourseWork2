@@ -17,7 +17,6 @@ public class JavaQuestionRepository implements QuestionRepository{
         this.javaQuestions = javaQuestions;
     }
 
-    @Override
     @PostConstruct
     public void init() {
         this.javaQuestions = new ArrayList<>(Arrays.asList(
