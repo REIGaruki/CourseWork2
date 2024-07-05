@@ -49,7 +49,7 @@ public class MathQuestionService implements QuestionService{
         int c = random.nextInt(4);
         int d = 0;
         char math = maths[c];
-        String question = a + ' ' + c + ' ' + b + " = ?";
+        String question = String.valueOf(a) + ' ' + maths[c] + ' ' + String.valueOf(b) + " = ?";
         switch (c) {
             case 0:
                 d=a+b;
