@@ -37,15 +37,15 @@ public class ExaminerServiceImpl implements ExaminerService{
             throw new TooBigAmountException("Try to get less questions, there are only "
                     + totalAmount);
         } else {
-            int javaQuestionAmount;
+            int mathQuestionAmount;
             Set<Question> randomQuestions = new HashSet<>();
             Random random = new Random();
-            javaQuestionAmount = random.nextInt(amount);
-            while (randomQuestions.size() < javaQuestionAmount) {
-                randomQuestions.add(javaQuestionService.getRandomQuestion());
+            mathQuestionAmount = random.nextInt(amount);
+            while (randomQuestions.size() < mathQuestionAmount) {
+                randomQuestions.add(mathQuestionService.getRandomQuestion());
             }
             while (randomQuestions.size() < amount) {
-                randomQuestions.add(mathQuestionService.getRandomQuestion());
+                randomQuestions.add(javaQuestionService.getRandomQuestion());
             }
             return randomQuestions;
         }

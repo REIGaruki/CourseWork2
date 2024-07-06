@@ -14,7 +14,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.*;
 
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -39,7 +38,7 @@ class ExaminerServiceImplTest {
             "A7");
     private final int JAVA_AMOUNT = 4;
     private final int MATH_AMOUNT = 3;
-    private final int TOTAL_AMOUNT = MATH_AMOUNT + JAVA_AMOUNT;
+    private final int TOTAL_AMOUNT = JAVA_AMOUNT + MATH_AMOUNT;
     private final int ERROR_AMOUNT = TOTAL_AMOUNT + 1;
 
     @Mock(name="JavaQuestionWervice")
@@ -54,7 +53,6 @@ class ExaminerServiceImplTest {
     void initSut() {
         sut = new ExaminerServiceImpl(javaQuestionServiceMock, mathQuestionServiceMock);
         when(javaQuestionServiceMock.getCollectionSize()).thenReturn(JAVA_AMOUNT);
-        when(mathQuestionServiceMock.getCollectionSize()).thenReturn(MATH_AMOUNT);
     }
 
 
@@ -69,7 +67,6 @@ class ExaminerServiceImplTest {
     @Test
     void shouldThrowExceptionWhenThereAreNoQuestions() {
         when(javaQuestionServiceMock.getCollectionSize()).thenReturn(0);
-        when(mathQuestionServiceMock.getCollectionSize()).thenReturn(0);
         Random random = new Random();
         int randomPositiveNumber = random.nextInt(Integer.MAX_VALUE) + 1;
         Assertions.assertThrows(RepositoryIsEmptyException.class,
@@ -79,21 +76,23 @@ class ExaminerServiceImplTest {
     void shouldReturnAmountOfUniqueQuestions() {
         when(javaQuestionServiceMock.getRandomQuestion()).thenReturn(
                 QUESTION_1,
-                QUESTION_1,
                 QUESTION_2,
                 QUESTION_3,
-                QUESTION_3,
-                QUESTION_1,
-                QUESTION_2,
-                QUESTION_4
-        );
-        when(mathQuestionServiceMock.getRandomQuestion()).thenReturn(
+                QUESTION_4,
                 QUESTION_5,
                 QUESTION_6,
-                QUESTION_6,
-                QUESTION_5,
                 QUESTION_7
         );
+        when(mathQuestionServiceMock.getRandomQuestion()).thenReturn(
+                QUESTION_1,
+                QUESTION_2,
+                QUESTION_3,
+                QUESTION_4,
+                QUESTION_5,
+                QUESTION_6,
+                QUESTION_7
+        );
+        when(javaQuestionServiceMock.getCollectionSize()).thenReturn(TOTAL_AMOUNT);
         Set<Question> expected = new HashSet<>();
         expected.add(QUESTION_1);
         expected.add(QUESTION_2);
