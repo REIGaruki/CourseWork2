@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 
 @Service
-@Qualifier("JavaQuestionService")
+@Qualifier("javaQuestionService")
 public class JavaQuestionService implements QuestionService{
     private QuestionRepository javaQuestionRepository;
 
@@ -38,6 +38,11 @@ public class JavaQuestionService implements QuestionService{
     @Override
     public int getCollectionSize() {
         return javaQuestionRepository.getCollectionSize();
+    }
+
+    @Override
+    public String getType() {
+        return "Java";
     }
 
     @Override

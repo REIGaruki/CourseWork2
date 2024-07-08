@@ -6,9 +6,9 @@ import com.example.exam.exception.TooBigAmountException;
 import com.example.exam.exception.TooSmallAmountException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -41,25 +41,37 @@ class ExaminerServiceImplTest {
     private final int TOTAL_AMOUNT = JAVA_AMOUNT + MATH_AMOUNT;
     private final int ERROR_AMOUNT = TOTAL_AMOUNT + 1;
 
-    @Mock(name="JavaQuestionWervice")
-    QuestionService javaQuestionServiceMock;
-    @Mock(name="MathQuestionService")
-    QuestionService mathQuestionServiceMock;
+    @Mock
+    JavaQuestionService javaQuestionServiceMock;
+    @Mock
+    MathQuestionService mathQuestionServiceMock;
 
-    @InjectMocks
     ExaminerServiceImpl sut;
 
     @BeforeEach
     void initSut() {
-        sut = new ExaminerServiceImpl(javaQuestionServiceMock, mathQuestionServiceMock);
-        when(javaQuestionServiceMock.getCollectionSize()).thenReturn(JAVA_AMOUNT);
+        List<QuestionService> services = List.of(mathQuestionServiceMock, javaQuestionServiceMock);
+        when(javaQuestionServiceMock.getType()).thenReturn(("Java"));
+        when(mathQuestionServiceMock.getType()).thenReturn(("Math"));
+        sut = new ExaminerServiceImpl(services);
+    }
+    @Test
+    @DisplayName("Выбрасывает нуллпоинтер при попытке обратиться к неизвестному сервису")
+    void getUnknownType() {
+        List<QuestionService> services = List.of(mathQuestionServiceMock, javaQuestionServiceMock);
+        when(javaQuestionServiceMock.getType()).thenReturn((""));
+        when(mathQuestionServiceMock.getType()).thenReturn((""));
+        sut = new ExaminerServiceImpl(services);
+        Assertions.assertThrows(NullPointerException.class,
+                () -> sut.getQuestions(1));
     }
 
-
     @Test
+    @DisplayName("")
     void shouldThrowExceptionWhenAmountOfRandomQuestionsIsGreaterThanQuestionCollectionSizeOrNegativeOrZero() {
         Random random = new Random();
         int randomNegativeNumberOrZero = random.nextInt(Integer.MAX_VALUE) * (-1);
+        when(javaQuestionServiceMock.getCollectionSize()).thenReturn(JAVA_AMOUNT);
         Assertions.assertThrows(TooBigAmountException.class, () -> sut.getQuestions(ERROR_AMOUNT));
         Assertions.assertThrows(TooSmallAmountException.class,
                 () -> sut.getQuestions(randomNegativeNumberOrZero));

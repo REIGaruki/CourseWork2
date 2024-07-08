@@ -4,31 +4,24 @@ import com.example.exam.domain.Question;
 import com.example.exam.exception.RepositoryIsEmptyException;
 import com.example.exam.exception.TooBigAmountException;
 import com.example.exam.exception.TooSmallAmountException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class ExaminerServiceImpl implements ExaminerService{
-    @Qualifier("JavaQuestionService")
-    QuestionService javaQuestionService;
-    @Qualifier("MathQuestionService")
-    QuestionService mathQuestionService;
+    private final Map<String, QuestionService> services;
 
-    @Autowired
-    public ExaminerServiceImpl(QuestionService javaQuestionService, QuestionService mathQuestionService) {
-        this.javaQuestionService = javaQuestionService;
-        this.mathQuestionService = mathQuestionService;
+    public ExaminerServiceImpl(List<QuestionService> services) {
+        this.services = new HashMap<>();
+        for (QuestionService service:services) {
+            this.services.put(service.getType(), service);
+        }
     }
 
     @Override
     public Collection<Question> getQuestions(int amount) {
-        int totalAmount = javaQuestionService.getCollectionSize();
+        int totalAmount = services.get("Java").getCollectionSize();
         if (totalAmount == 0) {
             throw new RepositoryIsEmptyException("We have no questions for you yet");
         }else if (amount <= 0) {
@@ -42,10 +35,10 @@ public class ExaminerServiceImpl implements ExaminerService{
             Random random = new Random();
             mathQuestionAmount = random.nextInt(amount);
             while (randomQuestions.size() < mathQuestionAmount) {
-                randomQuestions.add(mathQuestionService.getRandomQuestion());
+                randomQuestions.add(services.get("Math").getRandomQuestion());
             }
             while (randomQuestions.size() < amount) {
-                randomQuestions.add(javaQuestionService.getRandomQuestion());
+                randomQuestions.add(services.get("Java").getRandomQuestion());
             }
             return randomQuestions;
         }

@@ -12,7 +12,7 @@ import java.util.Collection;
 @RestController
 @RequestMapping(path="java")
 public class JavaController {
-    @Qualifier("JavaQuestionService") QuestionService javaQuestionService;
+    @Qualifier("javaQuestionService") QuestionService javaQuestionService;
 
     public JavaController(QuestionService javaQuestionService) {
         this.javaQuestionService = javaQuestionService;

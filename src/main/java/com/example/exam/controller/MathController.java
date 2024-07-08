@@ -12,7 +12,7 @@ import java.util.Collection;
 @RestController
 @RequestMapping(path="/math")
 public class MathController {
-    @Qualifier("MathQuestionService") QuestionService mathQuestionService;
+    @Qualifier("mathQuestionService") QuestionService mathQuestionService;
 
     public MathController(QuestionService mathQuestionService) {
         this.mathQuestionService = mathQuestionService;

@@ -2,7 +2,6 @@ package com.example.exam.service;
 
 import com.example.exam.domain.Question;
 import com.example.exam.exception.NoRepositoryException;
-import com.example.exam.repository.QuestionRepository;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
@@ -10,7 +9,7 @@ import java.util.Collection;
 import java.util.Random;
 
 @Service
-@Qualifier("MathQuestionService")
+@Qualifier("mathQuestionService")
 public class MathQuestionService implements QuestionService{
 
     public MathQuestionService() {
@@ -38,6 +37,11 @@ public class MathQuestionService implements QuestionService{
     @Override
     public int getCollectionSize() {
         throw new NoRepositoryException("Method not allowed");
+    }
+
+    @Override
+    public String getType() {
+        return "Math";
     }
 
     @Override

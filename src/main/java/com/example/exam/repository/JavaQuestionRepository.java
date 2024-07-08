@@ -5,7 +5,6 @@ import com.example.exam.exception.NoArgumentException;
 import com.example.exam.exception.QuestionAlreadyExistsException;
 import com.example.exam.exception.QuestionNotExistException;
 import jakarta.annotation.PostConstruct;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
 import java.util.*;
