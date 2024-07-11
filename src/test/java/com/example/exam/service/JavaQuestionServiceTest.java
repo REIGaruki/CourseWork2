@@ -55,13 +55,6 @@ class JavaQuestionServiceTest {
         Assertions.assertEquals(expected,actual);
     }
     @Test
-    void shouldGetSizeOfRepositoryCorrectly() {
-        when(javaQuestionRepositoryMock.getCollectionSize()).thenReturn(SIZE);
-        int expected = SIZE;
-        int actual = sut.getCollectionSize();
-        Assertions.assertEquals(expected,actual);
-    }
-    @Test
     void shouldGetAllQuestionsFromRepositoryCorrectly() {
         Collection<Question> expected = new ArrayList<>(Arrays.asList(
                 QUESTION_1, QUESTION_2, QUESTION_3

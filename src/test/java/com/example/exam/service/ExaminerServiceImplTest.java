@@ -40,6 +40,8 @@ class ExaminerServiceImplTest {
     private final int MATH_AMOUNT = 3;
     private final int TOTAL_AMOUNT = JAVA_AMOUNT + MATH_AMOUNT;
     private final int ERROR_AMOUNT = TOTAL_AMOUNT + 1;
+    private List<Question> JAVA_QUESTION_LIST = new ArrayList<>();
+    private List<Question> MATH_QUESTION_LIST = new ArrayList<>();
 
     @Mock
     JavaQuestionService javaQuestionServiceMock;
@@ -51,19 +53,15 @@ class ExaminerServiceImplTest {
     @BeforeEach
     void initSut() {
         List<QuestionService> services = List.of(mathQuestionServiceMock, javaQuestionServiceMock);
-        when(javaQuestionServiceMock.getType()).thenReturn(("Java"));
-        when(mathQuestionServiceMock.getType()).thenReturn(("Math"));
         sut = new ExaminerServiceImpl(services);
-    }
-    @Test
-    @DisplayName("Выбрасывает нуллпоинтер при попытке обратиться к неизвестному сервису")
-    void getUnknownType() {
-        List<QuestionService> services = List.of(mathQuestionServiceMock, javaQuestionServiceMock);
-        when(javaQuestionServiceMock.getType()).thenReturn((""));
-        when(mathQuestionServiceMock.getType()).thenReturn((""));
-        sut = new ExaminerServiceImpl(services);
-        Assertions.assertThrows(NullPointerException.class,
-                () -> sut.getQuestions(1));
+        JAVA_QUESTION_LIST.add(QUESTION_1);
+        JAVA_QUESTION_LIST.add(QUESTION_2);
+        JAVA_QUESTION_LIST.add(QUESTION_3);
+        JAVA_QUESTION_LIST.add(QUESTION_4);
+        MATH_QUESTION_LIST.add(QUESTION_5);
+        MATH_QUESTION_LIST.add(QUESTION_6);
+        MATH_QUESTION_LIST.add(QUESTION_7);
+
     }
 
     @Test
@@ -71,14 +69,14 @@ class ExaminerServiceImplTest {
     void shouldThrowExceptionWhenAmountOfRandomQuestionsIsGreaterThanQuestionCollectionSizeOrNegativeOrZero() {
         Random random = new Random();
         int randomNegativeNumberOrZero = random.nextInt(Integer.MAX_VALUE) * (-1);
-        when(javaQuestionServiceMock.getCollectionSize()).thenReturn(JAVA_AMOUNT);
+        when(javaQuestionServiceMock.getAll()).thenReturn(JAVA_QUESTION_LIST);
         Assertions.assertThrows(TooBigAmountException.class, () -> sut.getQuestions(ERROR_AMOUNT));
         Assertions.assertThrows(TooSmallAmountException.class,
                 () -> sut.getQuestions(randomNegativeNumberOrZero));
     }
     @Test
     void shouldThrowExceptionWhenThereAreNoQuestions() {
-        when(javaQuestionServiceMock.getCollectionSize()).thenReturn(0);
+        when(javaQuestionServiceMock.getAll().size()).thenReturn(0);
         Random random = new Random();
         int randomPositiveNumber = random.nextInt(Integer.MAX_VALUE) + 1;
         Assertions.assertThrows(RepositoryIsEmptyException.class,
@@ -104,7 +102,7 @@ class ExaminerServiceImplTest {
                 QUESTION_6,
                 QUESTION_7
         );
-        when(javaQuestionServiceMock.getCollectionSize()).thenReturn(TOTAL_AMOUNT);
+        when(javaQuestionServiceMock.getAll().size()).thenReturn(TOTAL_AMOUNT);
         Set<Question> expected = new HashSet<>();
         expected.add(QUESTION_1);
         expected.add(QUESTION_2);

@@ -10,18 +10,15 @@ import java.util.*;
 
 @Service
 public class ExaminerServiceImpl implements ExaminerService{
-    private final Map<String, QuestionService> services;
+    private final List<QuestionService> services;
 
     public ExaminerServiceImpl(List<QuestionService> services) {
-        this.services = new HashMap<>();
-        for (QuestionService service:services) {
-            this.services.put(service.getType(), service);
-        }
+        this.services = services;
     }
 
     @Override
     public Collection<Question> getQuestions(int amount) {
-        int totalAmount = services.get("Java").getCollectionSize();
+        int totalAmount = services.get(0).getAll().size();
         if (totalAmount == 0) {
             throw new RepositoryIsEmptyException("We have no questions for you yet");
         }else if (amount <= 0) {
@@ -35,10 +32,10 @@ public class ExaminerServiceImpl implements ExaminerService{
             Random random = new Random();
             mathQuestionAmount = random.nextInt(amount);
             while (randomQuestions.size() < mathQuestionAmount) {
-                randomQuestions.add(services.get("Math").getRandomQuestion());
+                randomQuestions.add(services.get(1).getRandomQuestion());
             }
             while (randomQuestions.size() < amount) {
-                randomQuestions.add(services.get("Java").getRandomQuestion());
+                randomQuestions.add(services.get(0).getRandomQuestion());
             }
             return randomQuestions;
         }

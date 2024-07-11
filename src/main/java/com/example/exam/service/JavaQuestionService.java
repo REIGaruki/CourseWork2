@@ -35,15 +35,6 @@ public class JavaQuestionService implements QuestionService{
     public Collection<Question> getAll() {
         return javaQuestionRepository.getAll();
     }
-    @Override
-    public int getCollectionSize() {
-        return javaQuestionRepository.getCollectionSize();
-    }
-
-    @Override
-    public String getType() {
-        return "Java";
-    }
 
     @Override
     public Question getRandomQuestion() {

@@ -17,7 +17,6 @@ class MathQuestionServiceTest {
         Assertions.assertThrows(NoRepositoryException.class, () -> sut.add(QUESTION_1));
         Assertions.assertThrows(NoRepositoryException.class, () -> sut.remove(QUESTION_1));
         Assertions.assertThrows(NoRepositoryException.class, () -> sut.getAll());
-        Assertions.assertThrows(NoRepositoryException.class, () -> sut.getCollectionSize());
     }
 
 

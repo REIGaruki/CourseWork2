@@ -34,15 +34,6 @@ public class MathQuestionService implements QuestionService{
     public Collection<Question> getAll() {
         throw new NoRepositoryException("Method not allowed");
     }
-    @Override
-    public int getCollectionSize() {
-        throw new NoRepositoryException("Method not allowed");
-    }
-
-    @Override
-    public String getType() {
-        return "Math";
-    }
 
     @Override
     public Question getRandomQuestion() {
