@@ -58,10 +58,6 @@ class ExaminerServiceImplTest {
         JAVA_QUESTION_LIST.add(QUESTION_2);
         JAVA_QUESTION_LIST.add(QUESTION_3);
         JAVA_QUESTION_LIST.add(QUESTION_4);
-        MATH_QUESTION_LIST.add(QUESTION_5);
-        MATH_QUESTION_LIST.add(QUESTION_6);
-        MATH_QUESTION_LIST.add(QUESTION_7);
-
     }
 
     @Test
@@ -76,7 +72,7 @@ class ExaminerServiceImplTest {
     }
     @Test
     void shouldThrowExceptionWhenThereAreNoQuestions() {
-        when(javaQuestionServiceMock.getAll().size()).thenReturn(0);
+        when(javaQuestionServiceMock.getAll()).thenReturn(null);
         Random random = new Random();
         int randomPositiveNumber = random.nextInt(Integer.MAX_VALUE) + 1;
         Assertions.assertThrows(RepositoryIsEmptyException.class,
@@ -88,21 +84,14 @@ class ExaminerServiceImplTest {
                 QUESTION_1,
                 QUESTION_2,
                 QUESTION_3,
-                QUESTION_4,
-                QUESTION_5,
-                QUESTION_6,
-                QUESTION_7
+                QUESTION_4
         );
         when(mathQuestionServiceMock.getRandomQuestion()).thenReturn(
-                QUESTION_1,
-                QUESTION_2,
-                QUESTION_3,
-                QUESTION_4,
                 QUESTION_5,
                 QUESTION_6,
                 QUESTION_7
         );
-        when(javaQuestionServiceMock.getAll().size()).thenReturn(TOTAL_AMOUNT);
+        when(javaQuestionServiceMock.getAll()).thenReturn(JAVA_QUESTION_LIST);
         Set<Question> expected = new HashSet<>();
         expected.add(QUESTION_1);
         expected.add(QUESTION_2);

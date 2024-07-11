@@ -49,11 +49,9 @@ public class JavaQuestionRepository implements QuestionRepository{
     public Question add(String question, String answer) {
         if (question == null || answer == null || question.equals("") || answer.equals("")) {
             throw new NoArgumentException("Absence of question or answer");
-        } else if (getAll().contains(new Question(question, answer))) {
-            throw new QuestionAlreadyExistsException("Question already exists");
         } else {
             Question newQuestion = new Question(question, answer);
-            javaQuestions.add(newQuestion);
+            add(newQuestion);
             return newQuestion;
         }
     }
