@@ -56,10 +56,15 @@ public class JavaQuestionRepositoryTest {
     }
     @Test
     void shouldAddQuestionCorrectly() {
-        Question removedQuestion = new Question(QUESTION_4, ANSWER_4);
-        int expected = sut.getCollectionSize() + 1;
-        sut.add(removedQuestion);
-        int actual = sut.getCollectionSize();
+        Question newQuestion = new Question(QUESTION_4, ANSWER_4);
+        List<Question> expected = new ArrayList<>(Arrays.asList(
+                new Question(QUESTION_1, ANSWER_1),
+                new Question(QUESTION_2, ANSWER_2),
+                new Question(QUESTION_3, ANSWER_3),
+                new Question(QUESTION_4, ANSWER_4)
+        ));
+        sut.add(newQuestion);
+        Collection<Question> actual = sut.getAll();
         Assertions.assertEquals(expected, actual);
     }
     @Test
@@ -78,9 +83,12 @@ public class JavaQuestionRepositoryTest {
     @Test
     void shouldRemoveQuestionCorrectly() {
         Question removedQuestion = new Question(QUESTION_2, ANSWER_2);
-        int expected = sut.getCollectionSize() - 1;
+        List<Question> expected = new ArrayList<>(Arrays.asList(
+                new Question(QUESTION_1, ANSWER_1),
+                new Question(QUESTION_3, ANSWER_3)
+        ));
         sut.remove(removedQuestion);
-        int actual = sut.getCollectionSize();
+        Collection<Question> actual = sut.getAll();
         Assertions.assertEquals(expected, actual);
     }
     @Test

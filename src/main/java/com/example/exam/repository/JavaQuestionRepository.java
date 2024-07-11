@@ -4,6 +4,7 @@ import com.example.exam.domain.Question;
 import com.example.exam.exception.NoArgumentException;
 import com.example.exam.exception.QuestionAlreadyExistsException;
 import com.example.exam.exception.QuestionNotExistException;
+import com.example.exam.exception.RepositoryIsEmptyException;
 import jakarta.annotation.PostConstruct;
 import org.springframework.stereotype.Repository;
 
@@ -81,15 +82,14 @@ public class JavaQuestionRepository implements QuestionRepository{
     public List<Question> getAll() {
         return this.javaQuestions;
     }
-    @Override
-    public int getCollectionSize() {
-        return javaQuestions.size();
-    }
 
     @Override
     public Question getRandomQuestion() {
+        if (getAll().size() == 0) {
+            throw new RepositoryIsEmptyException("There are no questions for you yet");
+        }
         Random random = new Random();
-        int randomId = random.nextInt(getCollectionSize());
+        int randomId = random.nextInt(javaQuestions.size());
         return javaQuestions.get(randomId);
     }
 }

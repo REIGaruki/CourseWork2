@@ -11,6 +11,7 @@ import java.util.Random;
 @Service
 @Qualifier("mathQuestionService")
 public class MathQuestionService implements QuestionService{
+    private final Random random = new Random();
 
     public MathQuestionService() {
     }
@@ -37,7 +38,6 @@ public class MathQuestionService implements QuestionService{
 
     @Override
     public Question getRandomQuestion() {
-        Random random = new Random();
         char maths[] = {'+', '-', '*', '/'};
         int a = random.nextInt(1000) + 1;
         int b = random.nextInt(1000) + 1;
