@@ -18,6 +18,7 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class ExaminerServiceImplTest {
+    private final Random random = new Random();
     private final Question QUESTION_1 = new Question("Что?",
             "Это"
     );
@@ -63,7 +64,6 @@ class ExaminerServiceImplTest {
     @Test
     @DisplayName("")
     void shouldThrowExceptionWhenAmountOfRandomQuestionsIsGreaterThanQuestionCollectionSizeOrNegativeOrZero() {
-        Random random = new Random();
         int randomNegativeNumberOrZero = random.nextInt(Integer.MAX_VALUE) * (-1);
         when(javaQuestionServiceMock.getAll()).thenReturn(JAVA_QUESTION_LIST);
         Assertions.assertThrows(TooBigAmountException.class, () -> sut.getQuestions(ERROR_AMOUNT));
@@ -73,7 +73,6 @@ class ExaminerServiceImplTest {
     @Test
     void shouldThrowExceptionWhenThereAreNoQuestions() {
         when(javaQuestionServiceMock.getAll()).thenReturn(null);
-        Random random = new Random();
         int randomPositiveNumber = random.nextInt(Integer.MAX_VALUE) + 1;
         Assertions.assertThrows(RepositoryIsEmptyException.class,
                 () -> sut.getQuestions(randomPositiveNumber));
