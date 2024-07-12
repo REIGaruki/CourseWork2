@@ -13,11 +13,12 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Stream;
 
 class JavaQuestionServiceTest {
-    JavaQuestionService sut = new JavaQuestionService();
+    JavaQuestionService sut;
     String QUESTION_1 = "Что такое «переменная»?";
     String ANSWER_1 = "Это переменная";
     String QUESTION_2 = "По каким параметрам переменные различаются?";
@@ -26,16 +27,16 @@ class JavaQuestionServiceTest {
     String ANSWER_3 = "Типы и действия";
     String QUESTION_4 = "Новый вопрос";
     String ANSWER_4 = "Новый ответ";
-
-
+    final List<Question> javaQuestions = new ArrayList<>(Arrays.asList(
+            new Question(QUESTION_1, ANSWER_1),
+            new Question(QUESTION_2, ANSWER_2),
+            new Question(QUESTION_3, ANSWER_3)
+    ));
     @BeforeEach
-    void fillngListBeforeAnyTest() {
-        sut.javaQuestions = new ArrayList<>(Arrays.asList(
-                new Question(QUESTION_1, ANSWER_1),
-                new Question(QUESTION_2, ANSWER_2),
-                new Question(QUESTION_3, ANSWER_3)
-        ));
+    void init() {
+        sut = new JavaQuestionService(javaQuestions);
     }
+
     public static Stream<Arguments> provideParamsForAddQuestionTest() {
         return Stream.of(
                 Arguments.of(null, "Answer"),
@@ -47,7 +48,7 @@ class JavaQuestionServiceTest {
     @ParameterizedTest
     @MethodSource("provideParamsForAddQuestionTest")
     void shouldThrowExceptionWhenThereAreNoQuestionOrAnswer(String questi0n, String answer) {
-    Assertions.assertThrows(NoArgumentException.class, () -> sut.add(questi0n, answer));
+        Assertions.assertThrows(NoArgumentException.class, () -> sut.add(questi0n, answer));
     }
     @Test
     void shouldAddQuestionCorrectly() {
@@ -58,21 +59,20 @@ class JavaQuestionServiceTest {
                 new Question(QUESTION_3, ANSWER_3),
                 new Question(QUESTION_4, ANSWER_4)
         ));
-        sut.add(QUESTION_4, ANSWER_4);
-        List<Question> actual = sut.javaQuestions;
+        sut.add(newQuestion);
+        Collection<Question> actual = sut.getAll();
         Assertions.assertEquals(expected, actual);
     }
     @Test
     void shouldReturnSameAddedQuestion() {
         Question expected = new Question(QUESTION_4, ANSWER_4);
-        Question actual = sut.add(QUESTION_4, ANSWER_4);
+        Question actual = sut.add(expected);
         Assertions.assertEquals(expected, actual);
     }
     @Test
     void shoudThrowExceptionIfQuestionIsAlreadyAdded() {
         Assertions.assertThrows(QuestionAlreadyExistsException.class,
-                () -> sut.add(
-                        new Question(QUESTION_1, ANSWER_1)
+                () -> sut.add(new Question(QUESTION_1, ANSWER_1)
                 ));
     }
 
@@ -84,7 +84,7 @@ class JavaQuestionServiceTest {
                 new Question(QUESTION_3, ANSWER_3)
         ));
         sut.remove(removedQuestion);
-        List<Question> actual = sut.javaQuestions;
+        Collection<Question> actual = sut.getAll();
         Assertions.assertEquals(expected, actual);
     }
     @Test
@@ -102,25 +102,20 @@ class JavaQuestionServiceTest {
 
     @Test
     void shouldGetAllQuestions() {
-        List<Question> expected = new ArrayList<>(Arrays.asList(
+        List<Question> javaQuestions = new ArrayList<>(Arrays.asList(
                 new Question(QUESTION_1, ANSWER_1),
                 new Question(QUESTION_2, ANSWER_2),
                 new Question(QUESTION_3, ANSWER_3)
         ));
-        List<Question> actual = sut.getAll();
-        Assertions.assertEquals(expected, actual);
-    }
-
-    @Test
-    void ShouldReturnQuantityOfQuestions() {
-        int expected = 3;
-        int actual = sut.getCollectionSize();
+        List<Question> expected = javaQuestions;
+        Collection<Question> actual = sut.getAll();
         Assertions.assertEquals(expected, actual);
     }
 
     @Test
     void shouldReturnRandomQuestionFromPoolOfJavaQuestions() {
         Question randomQuestion = sut.getRandomQuestion();
-        Assertions.assertTrue(sut.javaQuestions.contains(randomQuestion));
+        Assertions.assertTrue(sut.getAll().contains(randomQuestion));
     }
+
 }

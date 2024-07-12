@@ -1,8 +1,11 @@
 package com.example.exam.service;
 
 import com.example.exam.domain.Question;
+import com.example.exam.exception.RepositoryIsEmptyException;
 import com.example.exam.exception.TooBigAmountException;
+import com.example.exam.exception.TooSmallAmountException;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -15,44 +18,67 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class ExaminerServiceImplTest {
-    Question QUESTION_1 = new Question("Что?",
+    private final Random random = new Random();
+    private final Question QUESTION_1 = new Question("Что?",
             "Это"
     );
-    Question QUESTION_2 = new Question("Где?",
+    private final Question QUESTION_2 = new Question("Где?",
             "Здесь"
     );
-    Question QUESTION_3 = new Question("КОгда?",
+    private final Question QUESTION_3 = new Question("Когда?",
             "Сейчас");
+    private final Question QUESTION_4 = new Question("Q4?",
+            "A4"
+    );
+    private final int JAVA_AMOUNT = 4;
+    private final int ERROR_AMOUNT = JAVA_AMOUNT + 1;
+    private List<Question> JAVA_QUESTION_LIST = new ArrayList<>();
+
     @Mock
-    JavaQuestionService javaQuestionServiceMock = new JavaQuestionService();
+    JavaQuestionService javaQuestionServiceMock;
     @InjectMocks
-    ExaminerService sut = new ExaminerServiceImpl();
+    ExaminerServiceImpl sut;
+
+    @BeforeEach
+    void initSut() {
+        JAVA_QUESTION_LIST.add(QUESTION_1);
+        JAVA_QUESTION_LIST.add(QUESTION_2);
+        JAVA_QUESTION_LIST.add(QUESTION_3);
+        JAVA_QUESTION_LIST.add(QUESTION_4);
+    }
 
     @Test
-    void shouldThrowExceptionWhenAmountOfRandomQuestionsIsGreaterThanQuestionCollectionSize() {
-        int amount = 5;
-        when(javaQuestionServiceMock.getCollectionSize()).thenReturn(amount - 1);
-        Assertions.assertThrows(TooBigAmountException.class, () -> sut.getQuestions(amount));
+    void shouldThrowExceptionWhenAmountOfRandomQuestionsIsGreaterThanQuestionCollectionSizeOrNegativeOrZero() {
+        int randomNegativeNumberOrZero = random.nextInt(Integer.MAX_VALUE) * (-1);
+        when(javaQuestionServiceMock.getAll()).thenReturn(JAVA_QUESTION_LIST);
+        Assertions.assertThrows(TooBigAmountException.class, () -> sut.getQuestions(ERROR_AMOUNT));
+        Assertions.assertThrows(TooSmallAmountException.class,
+                () -> sut.getQuestions(randomNegativeNumberOrZero));
+    }
+    @Test
+    void shouldThrowExceptionWhenThereAreNoQuestions() {
+        when(javaQuestionServiceMock.getAll()).thenReturn(new ArrayList<>());
+        int randomPositiveNumber = random.nextInt(Integer.MAX_VALUE) + 1;
+        Assertions.assertThrows(RepositoryIsEmptyException.class,
+                () -> sut.getQuestions(randomPositiveNumber));
     }
     @Test
     void shouldReturnAmountOfUniqueQuestions() {
-        int amount = 3;
+        when(javaQuestionServiceMock.getRandomQuestion()).thenReturn(
+                QUESTION_1,
+                QUESTION_2,
+                QUESTION_3,
+                QUESTION_4
+        );
+        when(javaQuestionServiceMock.getAll()).thenReturn(JAVA_QUESTION_LIST);
         Set<Question> expected = new HashSet<>();
         expected.add(QUESTION_1);
         expected.add(QUESTION_2);
         expected.add(QUESTION_3);
-        when(javaQuestionServiceMock.getCollectionSize()).thenReturn(amount);
-        when(javaQuestionServiceMock.getRandomQuestion()).thenReturn(
-                QUESTION_1,
-                QUESTION_1,
-                QUESTION_2,
-                QUESTION_2,
-                QUESTION_1,
-                QUESTION_3
-        );
-        Collection<Question> actual = sut.getQuestions(amount);
+        expected.add(QUESTION_4);
+        Collection<Question> actual = sut.getQuestions(JAVA_AMOUNT);
         Assertions.assertEquals(expected, actual);
-        Assertions.assertEquals(amount, actual.size());
+        Assertions.assertEquals(JAVA_AMOUNT, actual.size());
     }
 
 }
