@@ -56,20 +56,18 @@ public class JavaQuestionService implements QuestionService{
     public Question add(Question question) {
         if (getAll().contains(question)) {
             throw new QuestionAlreadyExistsException("Question already exists");
-        } else {
-            javaQuestions.add(question);
-            return question;
         }
+        javaQuestions.add(question);
+        return question;
     }
 
     @Override
     public Question remove(Question question) {
         if (!getAll().contains(question)) {
             throw new QuestionNotExistException("Question does not exist");
-        } else {
-            javaQuestions.remove(question);
-            return question;
         }
+        javaQuestions.remove(question);
+        return question;
     }
 
     @Override

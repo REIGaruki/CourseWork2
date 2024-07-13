@@ -88,9 +88,8 @@ class JavaQuestionServiceTest {
     }
     @Test
     void shouldReturnSameRemovedQuestion() {
-        Question removedQuestion = new Question(QUESTION_1, ANSWER_1);
-        Question expected = removedQuestion;
-        Question actual = sut.remove(removedQuestion);
+        Question expected = new Question(QUESTION_1, ANSWER_1);
+        Question actual = sut.remove(expected);
         Assertions.assertEquals(expected, actual);
     }
     @Test
@@ -101,12 +100,11 @@ class JavaQuestionServiceTest {
 
     @Test
     void shouldGetAllQuestions() {
-        List<Question> javaQuestions = new ArrayList<>(Arrays.asList(
+        List<Question> expected = new ArrayList<>(Arrays.asList(
                 new Question(QUESTION_1, ANSWER_1),
                 new Question(QUESTION_2, ANSWER_2),
                 new Question(QUESTION_3, ANSWER_3)
         ));
-        List<Question> expected = javaQuestions;
         Collection<Question> actual = sut.getAll();
         Assertions.assertEquals(expected, actual);
     }
