@@ -6,18 +6,16 @@ import com.example.exam.exception.QuestionAlreadyExistsException;
 import com.example.exam.exception.QuestionNotExistException;
 import com.example.exam.exception.RepositoryIsEmptyException;
 import jakarta.annotation.PostConstruct;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 
-@Service
-@Qualifier("javaQuestionService")
+@Service(value= "javaQuestionService")
 public class JavaQuestionService implements QuestionService{
-    private List<Question> javaQuestions;
+    private List<Question> javaQuestions = new ArrayList<>();
+    private final Random random = new Random();
 
-    public JavaQuestionService(List<Question> javaQuestions) {
-        this.javaQuestions = javaQuestions;
+    public JavaQuestionService() {
     }
 
     @PostConstruct
@@ -44,18 +42,14 @@ public class JavaQuestionService implements QuestionService{
                 new Question("Что такое \"метод\"?",
                         "Сериал")
         ));
-
     }
 
     @Override
     public Question add(String question, String answer) {
         if (question == null || answer == null || question.equals("") || answer.equals("")) {
             throw new NoArgumentException("Absence of question or answer");
-        } else {
-            Question newQuestion = new Question(question, answer);
-            add(newQuestion);
-            return newQuestion;
         }
+        return add(new Question(question, answer));
     }
 
     @Override
@@ -88,7 +82,6 @@ public class JavaQuestionService implements QuestionService{
         if (getAll().isEmpty()) {
             throw new RepositoryIsEmptyException("There are no questions for you yet");
         }
-        Random random = new Random();
         int randomId = random.nextInt(javaQuestions.size());
         return javaQuestions.get(randomId);
     }
