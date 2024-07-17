@@ -4,8 +4,8 @@ import com.example.exam.domain.Question;
 import com.example.exam.exception.NoArgumentException;
 import com.example.exam.exception.QuestionAlreadyExistsException;
 import com.example.exam.exception.QuestionNotExistException;
+import com.example.exam.exception.RepositoryIsEmptyException;
 import jakarta.annotation.PostConstruct;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
 import java.util.*;
@@ -47,13 +47,11 @@ public class JavaQuestionRepository implements QuestionRepository{
 
     @Override
     public Question add(String question, String answer) {
-        if (question == null || answer == null || question == "" || answer == "") {
+        if (question == null || answer == null || question.equals("") || answer.equals("")) {
             throw new NoArgumentException("Absence of question or answer");
-        } else if (getAll().contains(new Question(question, answer))) {
-            throw new QuestionAlreadyExistsException("Question already exists");
         } else {
             Question newQuestion = new Question(question, answer);
-            javaQuestions.add(newQuestion);
+            add(newQuestion);
             return newQuestion;
         }
     }
@@ -82,15 +80,14 @@ public class JavaQuestionRepository implements QuestionRepository{
     public List<Question> getAll() {
         return this.javaQuestions;
     }
-    @Override
-    public int getCollectionSize() {
-        return javaQuestions.size();
-    }
 
     @Override
     public Question getRandomQuestion() {
+        if (getAll().size() == 0) {
+            throw new RepositoryIsEmptyException("There are no questions for you yet");
+        }
         Random random = new Random();
-        int randomId = random.nextInt(getCollectionSize());
+        int randomId = random.nextInt(javaQuestions.size());
         return javaQuestions.get(randomId);
     }
 }

@@ -1,47 +1,65 @@
 package com.example.exam.service;
 
 import com.example.exam.domain.Question;
-import com.example.exam.repository.QuestionRepository;
+import com.example.exam.exception.NoRepositoryException;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
+import java.util.Random;
 
 @Service
-@Qualifier("MathQuestionService")
+@Qualifier("mathQuestionService")
 public class MathQuestionService implements QuestionService{
-    private QuestionRepository mathQuestionRepository;
+    private final Random random = new Random();
 
-    public MathQuestionService(QuestionRepository mathQuestionRepository) {
-        this.mathQuestionRepository = mathQuestionRepository;
+    public MathQuestionService() {
     }
 
     @Override
     public Question add(String question, String answer) {
-        return mathQuestionRepository.add(question, answer);
+        throw new NoRepositoryException("Method not allowed");
     }
 
     @Override
     public Question add(Question question) {
-        return mathQuestionRepository.add(question);
+        throw new NoRepositoryException("Method not allowed");
     }
 
     @Override
     public Question remove(Question question) {
-        return mathQuestionRepository.remove(question);
+        throw new NoRepositoryException("Method not allowed");
     }
 
     @Override
     public Collection<Question> getAll() {
-        return mathQuestionRepository.getAll();
-    }
-    @Override
-    public int getCollectionSize() {
-        return mathQuestionRepository.getCollectionSize();
+        throw new NoRepositoryException("Method not allowed");
     }
 
     @Override
     public Question getRandomQuestion() {
-        return mathQuestionRepository.getRandomQuestion();
+        char maths[] = {'+', '-', '*', '/'};
+        int a = random.nextInt(1000) + 1;
+        int b = random.nextInt(1000) + 1;
+        int c = random.nextInt(4);
+        int d = 0;
+        char math = maths[c];
+        String question = String.valueOf(a) + ' ' + maths[c] + ' ' + String.valueOf(b) + " = ?";
+        switch (c) {
+            case 0:
+                d=a+b;
+                break;
+            case 1:
+                d=a-b;
+                break;
+            case 2:
+                d=a*b;
+                break;
+            case 3:
+                d=a/b;
+                break;
+        }
+        String answer = String.valueOf(d);
+        return new Question(question, answer);
     }
 }
